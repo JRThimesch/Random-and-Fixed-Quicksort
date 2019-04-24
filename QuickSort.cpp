@@ -1,30 +1,44 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <ctime>
+#include <chrono>
 #include <time.h>
 
 using namespace std;
+using namespace std::chrono;
+
 
 #define MAX_RANGE 10000
 
 bool RANDOM = false;
 bool RANDOM_PIVOT = false;
 
-void print_all(vector <long unsigned int> & v) {
-	for(unsigned int i = 0; i < v.size(); i++)
+void print_all(vector <long unsigned int> & v, ofstream &f) {
+	for(unsigned int i = 0; i < v.size(); i++){
+		if chrono::(i % 25 == 0) {
+			f << endl;
+		}
+
 		if (v.size() == 1) {
 			cout << "[" << v[i] << "]";
+			f << "[" << v[i] << "]";
 		}
 		else if (i == 0) {
 			cout << "[" << v[i] << ", ";
+			f << "[" << v[i] << ", ";
 		}
 		else if (i == v.size() - 1) {
 			cout << v[i] << "]";
+			f << v[i] << "]";
 		}
 		else {
 			cout << v[i] << ", ";
+			f << v[i] << ", ";
 		}
+	}
 }
 void print(vector <long unsigned int> & v, unsigned int st, unsigned int end) { for(unsigned int i=st; i<=end; i++) cout << v[i] << " ";}
 
@@ -77,6 +91,8 @@ void quickSort(vector <long unsigned int> & arr, int low, int high)
 
 
 int main() {
+  ofstream file;
+  file.open("output.txt");
   long unsigned int numOfInt = 0;
   long unsigned int incremental = 0;
   string reply = "";
@@ -119,12 +135,28 @@ int main() {
 		  a[i] = ((i + 1) + (i + 1) * (incremental));
   }
 
+  //time_t begin, end;
   cout << "BEFORE :";
-  print_all (a);
+  file << "BEFORE :";
+  print_all (a, file);
 
+  //time(&begin);
+  high_resolution_clock::time_point t1 = high_resolution_clock::now();
   quickSort(a, 0, a.size()-1);
+  high_resolution_clock::time_point t2 = high_resolution_clock::now();
+  //time(&end);
+
+
+  
 
   cout << endl << "AFTER :";
-  print_all (a);
+  file << endl << "AFTER :";
+  print_all (a, file);
+
+  auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+  //double duration = difftime(end, begin);
+  cout << endl << duration;
+  f << endl << "RUN TIME: " << duration;
+  file.close();
   return 0;
 }
