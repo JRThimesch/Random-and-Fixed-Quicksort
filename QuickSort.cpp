@@ -1,3 +1,6 @@
+// Name: Jonathan Thimesch
+// ID: D696H345
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,19 +13,22 @@
 using namespace std;
 using namespace std::chrono;
 
+/*
+ * Much of the partition and quicksort functions are borrowed from geeksforgeeks.com
+ * LINK: https://www.geeksforgeeks.org/quicksort-using-random-pivoting/
+ */
 
-#define MAX_RANGE 10000
+#define MAX_RANGE 10000 // MAX RANGE OF NUMBERS
 
-bool RANDOM = false;
-bool RANDOM_PIVOT = false;
-int random_time = 0;
+bool RANDOM = false; // DEFAULT RANDOM NUMBER GENERATION TO FALSE
+bool RANDOM_PIVOT = false; // DEFAULT THE RANDOMIZED QUICKSORT TO FALSE
 
-void print_all(vector <long unsigned int> & v, ofstream &f) {
+// PRINT FUNCTION JUST TO OUTPUT RESULTS
+void printAll(vector <long unsigned int> & v, ofstream &f) {
 	for(unsigned int i = 0; i < v.size(); i++){
 		if (i % 25 == 0) {
 			f << endl;
 		}
-
 		if (v.size() == 1) {
 			cout << "[" << v[i] << "]";
 			f << "[" << v[i] << "]";
@@ -41,18 +47,15 @@ void print_all(vector <long unsigned int> & v, ofstream &f) {
 		}
 	}
 }
-void print(vector <long unsigned int> & v, unsigned int st, unsigned int end) { for(unsigned int i=st; i<=end; i++) cout << v[i] << " ";}
 
+// PARTITION FIXED
 int partition(vector <long unsigned int> &arr, int low, int high)
 {
     int pivot = arr[high];
     int i = (low - 1);
 
     for (int j = low; j <= high - 1; j++) {
-
-
         if (arr[j] <= pivot) {
-
             i++;
             swap(arr[i], arr[j]);
         }
@@ -61,35 +64,31 @@ int partition(vector <long unsigned int> &arr, int low, int high)
     return (i + 1);
 }
 
-int partition_r(vector <long unsigned int> & arr, int low, int high)
+// PARTITION RANDOMLY
+int partitionR(vector <long unsigned int> & arr, int low, int high)
 {
-	high_resolution_clock::time_point t3 = high_resolution_clock::now();
     srand(time(NULL));
-    int random = low + rand() % (high - low);
-    high_resolution_clock::time_point t4 = high_resolution_clock::now();
-    random_time += duration_cast<microseconds>( t4 - t3 ).count();
+    int random = low + rand() % (high - low); // SELECTION OF RANDOM PIVOT
 
-    // Swap A[random] with A[high]
     swap(arr[random], arr[high]);
 
     return partition(arr, low, high);
 }
 
-void quickSort(vector <long unsigned int> & arr, int low, int high)
+// Quicksort function
+void quicksort(vector <long unsigned int> & arr, int low, int high)
 {
 	int pi = 0;
     if (low < high) {
 
-        /* pi is partitioning index, arr[p] is now
-        at right place */
     	if (RANDOM_PIVOT) {
-    		pi = partition_r(arr, low, high);
+    		pi = partitionR(arr, low, high);
     	} else {
     		pi = partition(arr, low, high);
     	}
 
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+        quicksort(arr, low, pi - 1);
+        quicksort(arr, pi + 1, high);
     }
 }
 
@@ -100,6 +99,9 @@ int main() {
   long unsigned int numOfInt = 0;
   long unsigned int incremental = 0;
   string reply = "";
+
+
+  // START PROMPT
   cout << "Input number of integers: ";
   cin >> numOfInt;
   cout << "Would you like to generate random numbers? (Y/N): ";
@@ -124,43 +126,41 @@ int main() {
   } else {
   	  cout << "Using regular quicksort." << endl;
   }
+  // DONE PROMPT
 
 
   vector<long unsigned int> a(numOfInt);
   cout << "Generating a list of " << numOfInt << " numbers..." << endl;
 
   if (RANDOM) {
+	  // FILL ARRAY WITH RANDOM INTEGERS
 	  srand( time(NULL) );
 	  for(long unsigned int i = 0; i < numOfInt; i++)
-		  a[i] = rand() % MAX_RANGE;
+		  a[i] = rand() % MAX_RANGE + 1; // NEED TO ADD 1 SO THAT 10000 WILL SHOW UP IN THE ARRAY
   } else {
 	  for(long unsigned int i = 0; i < numOfInt; i++)
+		  // FILL ARRAY WITH SORTED INTEGERS
 		  a[i] = ((i + 1) + (i + 1) * (incremental));
   }
 
-  //time_t begin, end;
   cout << "BEFORE :";
   file << "BEFORE :";
-  print_all (a, file);
+  printAll (a, file);
 
-  //time(&begin);
+  //START TIMER
   high_resolution_clock::time_point t1 = high_resolution_clock::now();
-  quickSort(a, 0, a.size()-1);
+
+  quicksort(a, 0, a.size()-1);
+
+  //END TIMER
   high_resolution_clock::time_point t2 = high_resolution_clock::now();
-
-  //time(&end);
-
-
-
 
   cout << endl << "AFTER :";
   file << endl << "AFTER :";
-  print_all (a, file);
+  printAll (a, file);
 
-  auto duration = duration_cast<microseconds>( t2 - t1 ).count();
-  //double duration = difftime(end, begin);
-  cout << endl << duration - random_time << " microseconds";
-  file << endl << "RUN TIME: " << duration - random_time << " microseconds";
+  auto duration = duration_cast<microseconds>( t2 - t1 ).count(); //CALCULATE TIME IT TOOK TO QUICKSORT
+  cout << endl << duration << " microseconds";
   file.close();
   return 0;
 }
