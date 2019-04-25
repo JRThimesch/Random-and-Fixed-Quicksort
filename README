@@ -1,11 +1,11 @@
 How to compile:
 1) Make sure you're in the directory of Quicksort.cpp
 2) Type this command in the terminal:
-	>> g++ Quicksort.cpp -std=c++11 -o {filename}
+	>> g++ QuickSort.cpp -std=c++11 -o {filename}
 	where {filename} is your choice of executable name, for instructional purposes, we will choose f as the filename
 	
 	so the command is 
-	>> g++ Quicksort.cpp -std=c++11 -o f
+	>> g++ QuickSort.cpp -std=c++11 -o f
 	
 	NOTE: The -std=c++11 flag is required as the code uses some parts of C++11, namely the <chrono> library, which gives us accurate runtimes.
 	
