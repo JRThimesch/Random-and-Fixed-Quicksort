@@ -111,8 +111,9 @@ int main() {
 	  cout << "Using random numbers." << endl;
   } else {
 	  cout << "Random numbers not set." << endl;
-	  cout << "Set a number to multiply and increment the sorted array elements by: ";
+	  cout << "Set a number to multiply and increment the sorted array elements by: " << endl;
 	  cin >> incremental;
+	  cout << endl;
   }
 
   cout << "Would you like to use randomized quicksort? (Y/N): ";
