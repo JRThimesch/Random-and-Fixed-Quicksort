@@ -1,0 +1,35 @@
+How to compile:
+1) Make sure you're in the directory of Quicksort.cpp
+2) Type this command in the terminal:
+	>> g++ Quicksort.cpp -std=c++11 -o {filename}
+	where {filename} is your choice of executable name, for instructional purposes, we will choose f as the filename
+	
+	so the command is 
+	>> g++ Quicksort.cpp -std=c++11 -o f
+	
+	NOTE: The -std=c++11 flag is required as the code uses some parts of C++11, namely the <chrono> library, which gives us accurate runtimes.
+	
+3) Everything should be successful as the g++ version in the school's environment supports C++11
+
+How to run:
+1) Make sure you're in the directory of the file outputed by the compilation of the program.
+2) Type this command in the terminal: 
+	>> ./{filename}
+	where {filename} is the name you chose for your executable.
+
+	Since we chose f as our name, the command is:
+	>> ./f
+3) The program should now ask you for a number of integers, this can be any integer but extremely high numbers might cause issues.
+4) The program will then ask if you would like to generate random numbers:
+	IF YOU CHOOSE YES:
+		The program will generate N random numbers and insert them into an array.
+	IF YOU CHOOSE NO:
+		The program will then ask you what number you'd like to multiply and increment by. The formula will be
+		(N) + (N)(X) where N is the number chosen in step 3, and X is the number you choose to multiply and increment by.
+		Choosing 0 will give you an array sorted in order of 1 to N.
+5) The program will lastly ask if you would like to use randomized quicksort.
+	IF YOU CHOOSE YES:
+		The program will use random quicksort. The pivot is set randomly.
+	IF YOU CHOOSE NO:
+		The program will use fixed quicksort. The pivot is set to the last element of the array.
+6) The program will output the result to the terminal but also to a new file name "output.txt", after which the program will close.
